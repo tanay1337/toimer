@@ -32,8 +32,8 @@ OPTIONS:
   -h, hours                 Sets a timer for n hours
 
 KEYPRESSES:
-  p                         Pauses and resumes a timer
-  r                         Pauses and resumes a timer
+  p                         Pauses (and resumes) a timer
+  r                         Restarts a timer
 ```
 
 ## LICENSE
