@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+function help_message() {
+        echo "╭──────────────────────────────────────────────────────────╮"
+        echo "│                        Toimer                            │"
+        echo "╰──────────────────────────────────────────────────────────╯"
+        echo ""
+        echo "USAGE:"
+        echo "  toimer [options]"
+        echo ""
+        echo "OPTIONS:"
+        echo "  help                      Prints this help message"
+        echo "  -s, seconds               Sets a timer for n seconds"
+        echo "  -m, minutes               Sets a timer for n minutes"
+        echo "  -h, hours                 Sets a timer for n hours"
+        echo ""
+        echo "╭──────────────────────────────────────────────────────────╮"
+        echo "│           https://github.com/tanay1337/toimer            │"
+        echo "╰──────────────────────────────────────────────────────────╯"
+}
+
+if [[ -z $2 ]]; then
+  if [[ $1 = 'help' ]]; then
+    help_message
+  else
+    ARG=$1
+    echo "Toimer set for ${ARG} minute(s)."
+    sleep $((ARG*60))
+    notify-send -u critical "Toimer" "Your set a timer for ${ARG} minute(s). The time is up!"
+  fi
+else
+  MODE=$1
+  TIMER=$2
+
+  case $MODE in
+    "-s" )
+      echo "Toimer set for ${TIMER} second(s)."
+      sleep $TIMER
+      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} second(s). The time is up!" ;;
+    "-m" )
+      echo "Toimer set for ${TIMER} minute(s)."
+      sleep $((TIMER*60))
+      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} minute(s). The time is up!" ;;
+    "-h" )
+      echo "Toimer set for ${TIMER} hour(s)."
+      sleep $((TIMER*60*60))
+      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} hour(s). The time is up!" ;;
+  esac
+fi
