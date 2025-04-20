@@ -61,7 +61,7 @@ if [[ -z $2 ]]; then
     echo "Toimer set for ${ARG} minute(s)."
     ORIGINAL_TIME=$TIMER
     countdown $TIMER
-    notify-send -u critical "Toimer" "Your set a timer for ${ARG} minute(s). The time is up!"
+    notify-send -u critical "Toimer" "You set a timer for ${ARG} minute(s). The time is up!"
   fi
 else
   MODE=$1
@@ -72,16 +72,16 @@ else
       echo "Toimer set for ${TIMER} second(s)."
       ORIGINAL_TIME=$TIMER
       countdown $TIMER
-      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} second(s). The time is up!" ;;
+      notify-send -u critical "Toimer" "You set a timer for ${TIMER} second(s). The time is up!" ;;
     "-m" )
       echo "Toimer set for ${TIMER} minute(s)."
       ORIGINAL_TIME=$((TIMER*60))
       countdown $((TIMER*60))
-      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} minute(s). The time is up!" ;;
+      notify-send -u critical "Toimer" "You set a timer for ${TIMER} minute(s). The time is up!" ;;
     "-h" )
       echo "Toimer set for ${TIMER} hour(s)."
       ORIGINAL_TIME=$((TIMER*60*60))
       countdown $((TIMER*60*60))
-      notify-send -u critical "Toimer" "Your set a timer for ${TIMER} hour(s). The time is up!" ;;
+      notify-send -u critical "Toimer" "You set a timer for ${TIMER} hour(s). The time is up!" ;;
   esac
 fi
