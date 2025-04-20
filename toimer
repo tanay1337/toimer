@@ -23,6 +23,8 @@ function help_message() {
   echo "╰──────────────────────────────────────────────────────────╯"
 }
 
+ORIGINAL_TIME=
+
 function countdown() {
   start="$(( $(date '+%s') + $1))"
   while [ $start -ge $(date +%s) ]; do
@@ -33,7 +35,7 @@ function countdown() {
       pause $time
       break
     elif [[ $input = "r" ]]; then
-      countdown $1 
+      countdown ${ORIGINAL_TIME}
       break
     fi
     sleep 0.1
@@ -41,10 +43,12 @@ function countdown() {
 }
 
 function pause() {
-  echo -e "\033[KTimer paused. Press p to resume."
+  printf "\033[K\rTimer paused. Press p to resume or r to reset. "
   read -rsn1 input 
-  if [[ $input = "p" ]]; then
-    countdown $1
+  if [[ $input = "r" ]]; then
+    countdown ${ORIGINAL_TIME}
+  elif [[ ! -z $input ]]; then
+    countdown ${1}
   fi
 }
 
@@ -55,6 +59,7 @@ if [[ -z $2 ]]; then
     ARG=$1
     TIMER=$((ARG*60))
     echo "Toimer set for ${ARG} minute(s)."
+    ORIGINAL_TIME=$TIMER
     countdown $TIMER
     notify-send -u critical "Toimer" "Your set a timer for ${ARG} minute(s). The time is up!"
   fi
@@ -65,14 +70,17 @@ else
   case $MODE in
     "-s" )
       echo "Toimer set for ${TIMER} second(s)."
+      ORIGINAL_TIME=$TIMER
       countdown $TIMER
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} second(s). The time is up!" ;;
     "-m" )
       echo "Toimer set for ${TIMER} minute(s)."
+      ORIGINAL_TIME=$((TIMER*60))
       countdown $((TIMER*60))
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} minute(s). The time is up!" ;;
     "-h" )
       echo "Toimer set for ${TIMER} hour(s)."
+      ORIGINAL_TIME=$((TIMER*60*60))
       countdown $((TIMER*60*60))
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} hour(s). The time is up!" ;;
   esac
