@@ -19,13 +19,23 @@ function help_message() {
         echo "╰──────────────────────────────────────────────────────────╯"
 }
 
+function countdown() {
+    start="$(( $(date '+%s') + $1))"
+    while [ $start -ge $(date +%s) ]; do
+        time="$(( $start - $(date +%s) ))"
+        printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
+        sleep 0.1
+    done
+}
+
 if [[ -z $2 ]]; then
   if [[ $1 = 'help' ]] || [[ -z $1 ]]; then
     help_message
   else
     ARG=$1
-    echo "Toimer set for ${ARG} minute(s)."
-    sleep $((ARG*60))
+    TIMER=$((ARG*60))
+    echo "Toimer set for ${TIMER} minute(s)."
+    countdown $TIMER
     notify-send -u critical "Toimer" "Your set a timer for ${ARG} minute(s). The time is up!"
   fi
 else
@@ -35,15 +45,15 @@ else
   case $MODE in
     "-s" )
       echo "Toimer set for ${TIMER} second(s)."
-      sleep $TIMER
+      countdown $TIMER
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} second(s). The time is up!" ;;
     "-m" )
       echo "Toimer set for ${TIMER} minute(s)."
-      sleep $((TIMER*60))
+      countdown $((TIMER*60))
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} minute(s). The time is up!" ;;
     "-h" )
       echo "Toimer set for ${TIMER} hour(s)."
-      sleep $((TIMER*60*60))
+      countdown $((TIMER*60*60))
       notify-send -u critical "Toimer" "Your set a timer for ${TIMER} hour(s). The time is up!" ;;
   esac
 fi
