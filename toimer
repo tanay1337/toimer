@@ -1,31 +1,51 @@
 #!/usr/bin/env bash
 
 function help_message() {
-        echo "╭──────────────────────────────────────────────────────────╮"
-        echo "│                        Toimer                            │"
-        echo "╰──────────────────────────────────────────────────────────╯"
-        echo ""
-        echo "USAGE:"
-        echo "  toimer [options]"
-        echo ""
-        echo "OPTIONS:"
-        echo "  help                      Prints this help message"
-        echo "  -s, seconds               Sets a timer for n seconds"
-        echo "  -m, minutes               Sets a timer for n minutes"
-        echo "  -h, hours                 Sets a timer for n hours"
-        echo ""
-        echo "╭──────────────────────────────────────────────────────────╮"
-        echo "│           https://github.com/tanay1337/toimer            │"
-        echo "╰──────────────────────────────────────────────────────────╯"
+  echo "╭──────────────────────────────────────────────────────────╮"
+  echo "│                        Toimer                            │"
+  echo "╰──────────────────────────────────────────────────────────╯"
+  echo ""
+  echo "USAGE:"
+  echo "  toimer [options]"
+  echo ""
+  echo "OPTIONS:"
+  echo "  help                      Prints this help message"
+  echo "  -s, seconds               Sets a timer for n seconds"
+  echo "  -m, minutes               Sets a timer for n minutes"
+  echo "  -h, hours                 Sets a timer for n hours"
+  echo ""
+  echo "KEYPRESSES:"
+  echo "  p                         Pauses and resumes a timer"
+  echo "  r                         Pauses and resumes a timer"
+  echo ""
+  echo "╭──────────────────────────────────────────────────────────╮"
+  echo "│           https://github.com/tanay1337/toimer            │"
+  echo "╰──────────────────────────────────────────────────────────╯"
 }
 
 function countdown() {
-    start="$(( $(date '+%s') + $1))"
-    while [ $start -ge $(date +%s) ]; do
-        time="$(( $start - $(date +%s) ))"
-        printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
-        sleep 0.1
-    done
+  start="$(( $(date '+%s') + $1))"
+  while [ $start -ge $(date +%s) ]; do
+    time="$(( $start - $(date +%s) ))"
+    printf '\033[K%s\r' "$(date -u -d "@$time" +%H:%M:%S)" &
+    read -rsn1 -t 0.01 input 
+    if [[ $input = "p" ]]; then
+      pause $time
+      break
+    elif [[ $input = "r" ]]; then
+      countdown $1 
+      break
+    fi
+    sleep 0.1
+  done
+}
+
+function pause() {
+  echo -e "\033[KTimer paused. Press p to resume."
+  read -rsn1 input 
+  if [[ $input = "p" ]]; then
+    countdown $1
+  fi
 }
 
 if [[ -z $2 ]]; then
@@ -34,7 +54,7 @@ if [[ -z $2 ]]; then
   else
     ARG=$1
     TIMER=$((ARG*60))
-    echo "Toimer set for ${TIMER} minute(s)."
+    echo "Toimer set for ${ARG} minute(s)."
     countdown $TIMER
     notify-send -u critical "Toimer" "Your set a timer for ${ARG} minute(s). The time is up!"
   fi

@@ -30,6 +30,10 @@ OPTIONS:
   -s, seconds               Sets a timer for n seconds
   -m, minutes               Sets a timer for n minutes
   -h, hours                 Sets a timer for n hours
+
+KEYPRESSES:
+  p                         Pauses and resumes a timer
+  r                         Pauses and resumes a timer
 ```
 
 ## LICENSE
