@@ -20,7 +20,7 @@ function help_message() {
 }
 
 if [[ -z $2 ]]; then
-  if [[ $1 = 'help' ]]; then
+  if [[ $1 = 'help' ]] || [[ -z $1 ]]; then
     help_message
   else
     ARG=$1
