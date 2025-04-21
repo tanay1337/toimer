@@ -52,16 +52,25 @@ function pause() {
   fi
 }
 
+function handler() {
+  ORIGINAL_TIME=$1
+  if [[ -z $3 ]]; then
+    echo "Toimer set for ${1} ${2}."
+    countdown $1
+    notify-send -u critical "Toimer" "You set a timer for ${1} ${2}. The time is up!"
+  else
+    echo "Toimer set for ${3} ${2}."
+    countdown $1
+    notify-send -u critical "Toimer" "You set a timer for ${3} ${2}. The time is up!"
+  fi
+}
+
 if [[ -z $2 ]]; then
   if [[ $1 = 'help' ]] || [[ -z $1 ]]; then
     help_message
   else
     ARG=$1
-    TIMER=$((ARG*60))
-    echo "Toimer set for ${ARG} minute(s)."
-    ORIGINAL_TIME=$TIMER
-    countdown $TIMER
-    notify-send -u critical "Toimer" "You set a timer for ${ARG} minute(s). The time is up!"
+    handler $((ARG*60)) "minute(s)" $ARG
   fi
 else
   MODE=$1
@@ -69,19 +78,10 @@ else
 
   case $MODE in
     "-s" )
-      echo "Toimer set for ${TIMER} second(s)."
-      ORIGINAL_TIME=$TIMER
-      countdown $TIMER
-      notify-send -u critical "Toimer" "You set a timer for ${TIMER} second(s). The time is up!" ;;
+      handler $TIMER "second(s)" ;;
     "-m" )
-      echo "Toimer set for ${TIMER} minute(s)."
-      ORIGINAL_TIME=$((TIMER*60))
-      countdown $((TIMER*60))
-      notify-send -u critical "Toimer" "You set a timer for ${TIMER} minute(s). The time is up!" ;;
+      handler $((TIMER*60)) "minute(s)" $TIMER ;;
     "-h" )
-      echo "Toimer set for ${TIMER} hour(s)."
-      ORIGINAL_TIME=$((TIMER*60*60))
-      countdown $((TIMER*60*60))
-      notify-send -u critical "Toimer" "You set a timer for ${TIMER} hour(s). The time is up!" ;;
+      handler $((TIMER*60*60)) "hour(s)" $TIMER ;;
   esac
 fi
